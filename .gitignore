@@ -1,2 +1,4 @@
 input.txt
 /**/input.txt
+**/__pycache__/**
+.DS_Store

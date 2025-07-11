@@ -89,10 +89,21 @@ export function partTwo(input: string): number {
 
   const directions = [
     [0, -1], // up
-    [0, 1], // down
-    [-1, 0], // left
     [1, 0], // right
+    [-1, 0], // left
+    [0, 1], // down
+    [1, -1], // ne
+    [-1, -1], // nw
+    [-1, 1], // sw
+    [1, 1], // se
   ];
+
+  const charAt = (pos: any) =>
+    pos && isWithinBounds(garden, pos) ? garden[pos[0]][pos[1]] : "";
+  const getNeighbors = (pos: any) =>
+    directions.map(
+      ([dx, dy]) => charAt([pos[0] + dx, pos[1] + dy]) === charAt(pos),
+    );
 
   const seenPlots = new Set();
   let sum = 0;
@@ -142,34 +153,15 @@ export function partTwo(input: string): number {
         const currPlot = garden[y][x];
 
         // Identify Corners
-        let notSame = 0;
-        let oob = 0;
-        for (const dir of directions) {
-          const nextX = x + dir[0];
-          const nextY = y + dir[1];
+        const [n, e, w, s, ne, nw, sw, se] = getNeighbors([x, y]);
 
-          if (isWithinBounds(garden, [nextX, nextY]) === false) {
-            oob++;
-            continue;
-          }
-
-          if (garden[nextX][nextY] !== currPlot) {
-            notSame++;
-          }
-        }
-
-        if (oob === 2 && notSame === 0) {
-          // Outside Corners
-          sides += 2;
-        } else if (oob === 1 && notSame === 2) {
-          sides += 3;
-        } else if (notSame === 3) {
-          sides += 3;
-        } else if (notSame === 2) {
-          sides += 2;
-        } else if (notSame === 4) {
-          sides += 8;
-        }
+        const corners = [
+          !(w || n) || (w && n && !nw),
+          !(w || s) || (w && s && !sw),
+          !(e || n) || (e && n && !ne),
+          !(e || s) || (e && s && !se),
+        ].filter(Boolean).length;
+        sides += corners;
       });
 
       // Calculate Perimiter
@@ -193,7 +185,7 @@ export function partTwo(input: string): number {
         }
       });
 
-      sum += (sides * perimiter) / 2;
+      sum += perimiter * (sides / 4);
     });
   });
 
