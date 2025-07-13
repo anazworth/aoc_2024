@@ -1,0 +1,16 @@
+import unittest
+
+
+from main import part_one
+
+
+class TestMain(unittest.TestCase):
+    def setUp(self):
+        with open("example.txt", "r") as f:
+            self.input = f.read()
+
+    def test_part_one(self):
+        expected = 10092
+        result = part_one(self.input)
+
+        self.assertEqual(expected, result)
