@@ -1,7 +1,7 @@
 import unittest
 
 
-from main import part_one
+from main import part_one, part_two
 
 
 class TestMain(unittest.TestCase):
@@ -12,5 +12,11 @@ class TestMain(unittest.TestCase):
     def test_part_one(self):
         expected = 10092
         result = part_one(self.input)
+
+        self.assertEqual(expected, result)
+
+    def test_part_two(self):
+        expected = 9021
+        result = part_two(self.input)
 
         self.assertEqual(expected, result)
